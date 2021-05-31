@@ -58,10 +58,16 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                 true
             }
             R.id.action_sort_by_name -> {
+                viewModel.sortOrder.value = SortOrder.BY_NAME
+                true
+            }
+            R.id.action_sort_by_date -> {
+                viewModel.sortOrder.value = SortOrder.BY_DATE
                 true
             }
             R.id.action_hide_completed_tasks -> {
                 item.isChecked = !item.isChecked
+                viewModel.hideCompleted.value = item.isChecked
                 true
             }
             R.id.action_delete_all_completed_tasks -> {
