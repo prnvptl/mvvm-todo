@@ -24,7 +24,7 @@
         android:ellipsize="end"
         android:gravity="left|center"
         android:maxLines="1"
-        android:textColor="@color/black"
+        android:textColor="?android:attr/textColorPrimary"
         tools:text="Example Item" />
 
     <androidx.appcompat.widget.AppCompatImageView
