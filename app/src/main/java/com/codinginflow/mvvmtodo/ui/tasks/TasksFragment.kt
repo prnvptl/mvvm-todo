@@ -34,6 +34,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
 
     private val viewModel: TasksViewModel by viewModels()
 
+    // fixes bug when device rotates.
+    private lateinit var searchView: SearchView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -110,7 +113,14 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         inflater.inflate(R.menu.menu_fragment_tasks, menu)
 
         val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView
+        searchView = searchItem.actionView as SearchView
+
+        // fixes bug when device rotates.
+        val pendingSearchQuery = viewModel.searchQuery.value
+        if(pendingSearchQuery != null && pendingSearchQuery.isNotEmpty()) {
+            searchItem.expandActionView()
+            searchView.setQuery(pendingSearchQuery, false)
+        }
 
         searchView.onQueryTextChanged {
             // update search when text changes.
@@ -156,5 +166,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
 
     override fun onCheckBoxClick(task: Task, isChecked: Boolean) {
         viewModel.onTaskCheckedChange(task, isChecked)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // fixes bug when device rotates.
+        searchView.setOnQueryTextListener(null)
     }
 }
